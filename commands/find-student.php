@@ -1,5 +1,6 @@
 <?php
 
+use Alura\Doctrine\Entity\Phone;
 use Alura\Doctrine\Entity\Student;
 use Alura\Doctrine\Helper\EntityManagerFactory;
 
@@ -13,14 +14,12 @@ $studentRepository = $entityManager->getRepository(Student::class);
 $studentList = $studentRepository->findAll();
 
 foreach ($studentList as $student) {
+	$phones = $student
+		->getPhones()
+		->map(function (Phone $phone) {
+			return $phone->getNumber();
+		})
+		->toArray();
 	echo "ID: {$student->getId()}\nNome: {$student->getName()}\n\n";
+	echo "Telefones: " . implode(', ', $phones);
 }
-
-$ju = $studentRepository->find(2);
-echo $ju->getName() . "\n\n";
-
-$leo = $studentRepository->findOneBy([
-	'name' => 'Leonardo Theodoro',
-]);
-
-var_dump($leo);
